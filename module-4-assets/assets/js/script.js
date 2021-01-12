@@ -18,14 +18,14 @@ var taskFormHandler = function(event) {
 // Package up data as an object
     var taskDataObj = {
         name: taskNameInput,
-        type: taskNameInput
+        type: taskTypeInput
     };
 
 // Sent it as an argument to createTaskEL
     createTaskEl(taskDataObj);
-}
+};
 
- var createTaskEl = function(taskDataObj) {
+ var createTaskEl = function (taskDataObj) {
 // Create list item
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
