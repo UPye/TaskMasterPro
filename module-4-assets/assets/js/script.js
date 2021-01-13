@@ -62,6 +62,7 @@ var completeEditTask = function(taskName, taskType, taskId) {
 
 // Add task id as a custom attribute
     listItemEl.setAttribute("data-task-id", taskIdCounter);
+    listItemEl.setAttribute("draggable", "true");
 
 // Create div to hold task info and add to list item
     var taskInfoEl = document.createElement("div");
