@@ -35,7 +35,8 @@ var taskFormHandler = function(event) {
     // Package up data as an object
         var taskDataObj = {
             name: taskNameInput,
-            type: taskTypeInput
+            type: taskTypeInput,
+            status: "to do"
         };
     // Sent it as an argument to createTaskEL
         createTaskEl(taskDataObj);
@@ -47,6 +48,8 @@ var createTaskEl = function (taskDataObj) {
 // Create list item
         var listItemEl = document.createElement("li");
         listItemEl.className = "task-item";
+        console.log(taskDataObj);
+        console.log(taskDataObj.status);
     
 // Add task id as a custom attribute
         listItemEl.setAttribute("data-task-id", taskIdCounter);
@@ -58,6 +61,9 @@ var createTaskEl = function (taskDataObj) {
         taskInfoEl.innerHTML = 
             "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
         listItemEl.appendChild(taskInfoEl);
+
+        taskDataObj.id = taskIdCounter;
+        tasks.push(taskDataObj);
     
         var taskActionsEl = createTaskActions(taskIdCounter);
         listItemEl.appendChild(taskActionsEl);
@@ -124,6 +130,16 @@ var completeEditTask = function(taskName, taskType, taskId) {
         taskSelected.querySelector("h3.task-name").textContent = taskName;
         taskSelected.querySelector("span.task-type").textContent = taskType;
     
+        debugger;
+// Loop through tasks array and task object with new content
+        for (var i = 0; i < tasks.length; i++) {
+            if (tasks[i].id === parseInt(taskId)) {
+                tasks[i].name = taskName;
+                tasks[i].type = taskType;
+            }
+            debugger;
+        };
+
         alert("Task Updated!");
     
         formEl.removeAttribute("data-task-id");
@@ -173,6 +189,14 @@ var taskStatusChangeHandler = function(event) {
     else if (statusValue === "completed") {
         tasksCompletedEl.appendChild(taskSelected);
     }
+
+// Update task's in tasks array
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === parseInt(taskId)) {
+            tasks[i].status = statusValue;
+        };
+    }
+    console.log(tasks);
 };
     
 
@@ -207,6 +231,20 @@ var deleteTask = function(taskId) {
 // Find task list element with taskId value and remove it
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     taskSelected.remove();
+
+// Create new array to hold updated list of tasks
+    var updatedTaskArr = [];
+
+// Loop through current tasks
+    for (var i = 0; i < tasks.length; i++) {
+    // If tasks[i].id doesn't match the value of taskId, let's keep that task and push it into the new array
+      if (tasks[i].id !== parseInt(taskId)) {
+          updatedTaskArr.push(tasks[i]);
+      }  
+    }
+
+// Reassign tasks array to be the same as updatedTaskArr
+    tasks = updatedTaskArr;
 };
 
 var dropTaskHandler = function(event) {
@@ -231,6 +269,15 @@ var dropTaskHandler = function(event) {
     }
 
     dropZone.appendChild(draggableElement);
+
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === parseInt(id)) {
+            tasks[i].status = statusSelectEl.value.toLowerCase();
+        }
+
+    }
+
+    console.log(tasks);
     
 };
 
@@ -249,6 +296,14 @@ var dragTaskHandler = function(event) {
         var taskId = event.target.getAttribute("data-task-id");
         event.dataTransfer.setData("text/plain", taskId);
     }
+
+// Loop through tasks array to find and update the updated task's status
+    for (var i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === parseInt(id)) {
+            tasks[i].status = statusSelectEl.value.toLowerCase();
+        }
+    }
+    console.log(tasks);
 };
 
 
@@ -260,6 +315,27 @@ var dragLeaveHandler = function(event) {
         event.target.closest(".task-list").removeAttribute("style");
     }
 };
+
+var tasks = [
+    {
+        id: 1,
+        name: "Add localStorage persistence",
+        type: "web",
+        status: "in progress"
+    },
+    {
+        id: 2,
+        name: "Learn JavaScript",
+        type: "Web",
+        status: "in progress"
+    },
+    {
+        id: 3,
+        name: "Refactor code",
+        type: "Web",
+        status: "to do"
+    }
+];
 
 
 // Create a new task
