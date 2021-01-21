@@ -81,7 +81,54 @@ $(".list-group").on("click", "p", function() {
   // Replace textarea with p element
     $(this).replaceWith(taskP);
   });
+
+// Value of due date was changed
+$(".list-group").on("blur", "input[type='text']", function() {
+  // Get current text
+  var date = $(this)
+    .val()
+    .trim();
+
+  // Get the parent ul's id attribute
+  var status = $(this)
+    .closest(".list-group")
+    .attr("id")
+    .replace("list-", "");
+
+  // Get the task's position in the list of order li elements
+  var index = $(this)
+    .closest(".list-group-item")
+    .index();
+
+  // Update task in array and re-save to localStorage
+  var taskSpan = $("<span>")
+    .addClass("badge badge-primary badge-pill")
+    .text(date);
+
+  // Replace input with span element
+  $(this).replaceWith(taskSpan);
 });
+});
+
+// Due date was clicked
+  $(".list-group").on("click", "span", function() {
+  // Get current text
+    var date = $(this)
+      .text()
+      .trim();
+
+  // Create new input element
+    var dateInput = $("<input>")
+      .attr("type", "text")
+      .addClass("form-control")
+      .val(date);
+
+  // Swap out elements
+    $(this).replaceWith(dateInput);
+
+  // Automatically focus on new element
+    dateInput.trigger("focus");
+  });
 
 
 
