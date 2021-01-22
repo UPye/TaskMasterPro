@@ -52,6 +52,7 @@ $(".list-group").on("click", "p", function() {
   $(this).replaceWith(textInput);
   textInput.trigger("focus");
   console.log(text);
+});
 
   $(".list-group").on("blur", "textarea", function() {
   // Get the textarea's current value/text
@@ -101,13 +102,16 @@ $(".list-group").on("blur", "input[type='text']", function() {
     .index();
 
   // Update task in array and re-save to localStorage
+  tasks[status][index].date = date;
+  saveTasks();
+
+  // Recreate span element with bootstrap classes
   var taskSpan = $("<span>")
     .addClass("badge badge-primary badge-pill")
     .text(date);
 
   // Replace input with span element
   $(this).replaceWith(taskSpan);
-});
 });
 
 // Due date was clicked
