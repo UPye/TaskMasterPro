@@ -84,7 +84,7 @@ $(".list-group").on("click", "p", function() {
   });
 
 // Value of due date was changed
-$(".list-group").on("blur", "input[type='text']", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   // Get current text
   var date = $(this)
     .val()
@@ -130,6 +130,14 @@ $(".list-group").on("blur", "input[type='text']", function() {
   // Swap out elements
     $(this).replaceWith(dateInput);
 
+    dateInput.datepicker({
+      minDate: 1,
+      onClose: function() {
+        // When calendar is closed, force a "change" event on the dateInput
+        $(this).trigger("change");
+      }
+    });
+
   // Automatically focus on new element
     dateInput.trigger("focus");
   });
@@ -155,6 +163,13 @@ $("#task-form-modal .btn-primary").click(function() {
   var taskText = $("#modalTaskDescription").val();
   var taskDate = $("#modalDueDate").val();
 
+  
+    
+  $("#modalDueDate").datepicker({
+    minDate: 1
+  });
+
+
   if (taskText && taskDate) {
     createTask(taskText, taskDate, "toDo");
 
@@ -167,8 +182,9 @@ $("#task-form-modal .btn-primary").click(function() {
       date: taskDate
     });
 
+
     saveTasks();
-  }
+  }  
 });
 
 // remove all tasks
